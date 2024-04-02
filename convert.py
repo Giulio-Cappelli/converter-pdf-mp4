@@ -13,6 +13,7 @@ if not os.path.exists(IMAGES_PATH):
 parser = argparse.ArgumentParser(description="Convert a PDF to a MP4 (The images needs to be all the same dimensions)")
 parser.add_argument("input", help="Path to input PDF")
 parser.add_argument("output", type=str, help="Output file path and name")
+parser.add_argument("fps", type=int, help="fps of the output video", default=60)
 args = parser.parse_args()
 
 # Open input file
@@ -35,7 +36,7 @@ height, width, layers = frame.shape
 
 four_cc = cv2.VideoWriter_fourcc(*'mp4v')
 
-video = cv2.VideoWriter(args.output, four_cc, 60, (width, height))
+video = cv2.VideoWriter(args.output, four_cc, args.fps, (width, height))
 
 if not video.isOpened():
     print("Error: Failed to open output video file.")
