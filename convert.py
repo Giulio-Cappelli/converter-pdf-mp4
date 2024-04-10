@@ -2,6 +2,7 @@ import argparse
 from pypdf import PdfReader
 import os
 import cv2
+from alive_progress import alive_bar
 
 IMAGES_PATH = "./images/"
 
@@ -21,12 +22,16 @@ reader = PdfReader(args.input)
 
 count = 0
 
-# Append images to video
-for page in reader.pages:
-    for image in page.images:
-        with open(IMAGES_PATH + str(count) + "_image.png", "wb") as fp:
-            fp.write(image.data)
-            count += 1
+
+# Extracting images from pdf
+print("Extracting images from pdf")
+with alive_bar(count) as bar:
+    for page in reader.pages:
+        for image in page.images:
+            with open(IMAGES_PATH + str(count) + "_image.png", "wb") as fp:
+                fp.write(image.data)
+                count += 1
+                bar()
 
 
 # Create video
@@ -42,14 +47,18 @@ if not video.isOpened():
     print("Error: Failed to open output video file.")
     exit()
 
-for image in images:
-    img_path = os.path.join(IMAGES_PATH, image)
-    img = cv2.imread(img_path)
-    if img is not None:
-        video.write(img)
-    else:
-        print(f"Warning: Failed to read image file: {img_path}")
-    
+# Appending images to video
+print("Appending images to video")
+with alive_bar(count) as bar:
+    for image in images:
+        img_path = os.path.join(IMAGES_PATH, image)
+        img = cv2.imread(img_path)
+        if img is not None:
+            video.write(img)
+        else:
+            print(f"Warning: Failed to read image file: {img_path}")
+        bar()
+        
 # Clear output and save video
 os.system("rm -rf ./images/*")
 cv2.destroyAllWindows()
