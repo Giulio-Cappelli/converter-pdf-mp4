@@ -26,7 +26,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument("input", help="Path to input PDF")
 parser.add_argument("output", type=str, help="Output file path and name")
-parser.add_argument("fps", type=int, help="fps of the output video", default=60)
+parser.add_argument("fps", type=int, help="Fps of the output video", default=60)
 args = parser.parse_args()
 
 # Create rich library object
