@@ -5,7 +5,12 @@
 To use the converter just install the requirements with
 ```bash
   pip3 install -r requirements.txt
-``` 
+```
+Or if you want to use the virtual environment type
+```bash
+  source .venv/bin/activate
+  pip3 install -r requirements.txt
+```
 
 And then run the converter with
 ```bash
